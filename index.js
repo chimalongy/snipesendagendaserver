@@ -16,13 +16,13 @@ const app = express();
 // ✅ CORS Configuration
 app.use(cors({
   origin: 'https://snipesend.vercel.app', // ✅ your frontend domain
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: [ 'POST'],
   allowedHeaders: ['Content-Type'],
   credentials: true
 }));
 
 // ✅ Explicitly handle preflight requests
-app.options('*', cors());
+// app.options('*', cors());
 
 // ✅ Middleware
 // app.use(morgan('combined')); // Uncomment if you want logging
