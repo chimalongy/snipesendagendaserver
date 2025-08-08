@@ -20,6 +20,7 @@ app.use(cors({
   // maxAge: 86400,                        // Preflight cache duration (in seconds)
   // optionsSuccessStatus: 204             // Response status for successful OPTIONS requests (default is 204)
 }));
+app.use(morgan('combined')); // or 'dev', 'tiny', etc.
 app.use(express.json());
 app.use('/schedule', scheduleRouter);
 app.use('/get-outbound-tasks', getoutboundtasksroute);
