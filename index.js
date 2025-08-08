@@ -16,9 +16,11 @@ console.log(process.env.MAIN_APP_DEV)
 // app.use(cors({
 //   origin: [process.env.MAIN_APP_DEV, process.env.MAIN_APP_PROD, process.env.MAIN_APP_PROD_DOMAIN_2,"127.0.0.1"],        // or a function for dynamic origin checking
 // }));
-app.use(cors({
-  origin: "*",        // or a function for dynamic origin checking
-}));
+// app.use(cors({
+//   origin: "*",        // or a function for dynamic origin checking
+// }));
+
+app.use(cors());
 
 app.use(morgan('combined')); // or 'dev', 'tiny', etc.
 app.use(express.json());
