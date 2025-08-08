@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  worker:
+    build: .
+    container_name: snipesend-agenda
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - MONGO_URI=mongodb+srv://snipesend:chimsyboy@tasks.7njsehc.mongodb.net/?retryWrites=true&w=majority&appName=tasks
+      - DATABASE_URL=postgresql://postgres.ywuigxwzpmwlgyxodmih:%40Chimsyboy2275@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+      - MAIN_APP_DEV=http://localhost:3000
+      - MAIN_APP_PROD=https://snipesend.vercel.app
+      - MAIN_APP_PROD_DOMAIN_2=https://snipesend-chimalongys-projects.vercel.app
+      
+    restart: unless-stopped
+    healthcheck:
+      test: [
+        "CMD",
+        "node",
+        "-e",
+        "require('http').get('http://localhost:4000/schedule', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+      ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
