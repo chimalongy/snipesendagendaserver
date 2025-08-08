@@ -6,20 +6,20 @@ import deleteoutboundtasksroute from "./routes/deteleteoutboundtasks.js"
 import agenda from './agenda.js';
 import { defineEmailJob } from './jobs/emailJob.js';
 import { defineMasterJob } from './jobs/masterTrigger.js';
-import morgan from 'morgan';
 import cors from "cors"
 
 dotenv.config();
  
 const app = express();
-console.log(process.env.MAIN_APP_DEV) 
 app.use(cors({
-  origin: [process.env.MAIN_APP_DEV, process.env.MAIN_APP_PROD, process.env.MAIN_APP_PROD_DOMAIN_2],        // or a function for dynamic origin checking
+  origin: [process.env.MAIN_APP_DEV, process.env.MAIN_APP_PROD],        // or a function for dynamic origin checking
+  // methods: ["GET", "POST", "PUT"],      // Allowed HTTP methods
+  // allowedHeaders: ["Content-Type"],     // Allowed headers in request
+  // exposedHeaders: ["X-Token"],          // Headers to expose in response
+  // credentials: true,                    // Allow cookies/auth headers
+  // maxAge: 86400,                        // Preflight cache duration (in seconds)
+  // optionsSuccessStatus: 204             // Response status for successful OPTIONS requests (default is 204)
 }));
-// app.use(cors({
-//   origin: "*",        // or a function for dynamic origin checking
-// }));
-
 app.use(morgan('combined')); // or 'dev', 'tiny', etc.
 app.use(express.json());
 app.use('/schedule', scheduleRouter);
@@ -38,11 +38,8 @@ defineMasterJob(agenda);
   });
 })();
 
-['SIGTERM', 'SIGINT'].forEach(signal => {
-  process.on(signal, async () => {
-    console.log(`Received ${signal}, shutting down...`);
-    await agenda.stop(); 
-    process.exit(0); 
-  });
+process.on('SIGTERM', async () => {
+  await agenda.stop();
+  process.exit(0);
 });
 
