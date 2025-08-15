@@ -1,21 +1,22 @@
 import pool from "./database/postgresdb.js";
 
 async function UploadSendingResult(uploaddata) {
- console.log("UPLOADING SENDING RESULT  :", uploaddata)
+  console.log("UPLOADING SENDING RESULT:", uploaddata);
 
   const query = `
     INSERT INTO task_results (
       user_id,
       outbound_id,
       task_id,
+      task_name,
       sent_from,
       receiver,
       message_id,
+      thread_id,
       send_result,
-      send_time,
-      task_name
+      send_time
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING *;
   `;
 
@@ -27,8 +28,9 @@ async function UploadSendingResult(uploaddata) {
     sent_from,
     receiver,
     message_id,
+    thread_id = null,
     send_result,
-    send_time, // Optional: can default to now if not provided
+    send_time // optional
   } = uploaddata;
 
   try {
@@ -37,13 +39,13 @@ async function UploadSendingResult(uploaddata) {
       user_id,
       outbound_id,
       task_id,
+      task_name,
       sent_from,
       receiver,
       message_id,
+      thread_id,
       send_result,
-      send_time || new Date(), // fallback to current time
-      task_name
-
+      send_time || new Date() // fallback to now if not provided
     ]);
     client.release();
 
@@ -54,5 +56,6 @@ async function UploadSendingResult(uploaddata) {
     return { success: false, error: error.message };
   }
 }
+
 
 export default UploadSendingResult;

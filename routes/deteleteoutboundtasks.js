@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const { outboundname } = req.body;
-   console.log(outboundname)
+   //console.log(outboundname)
   if (!outboundname) {
     return res.status(400).json({
       success: false,
@@ -21,14 +21,14 @@ router.post("/", async (req, res) => {
     let deletedTasks = [];
 
     for (const job of existingJobs) {
-      if (job.attrs.data?.outboundname === outboundname) {
+      if (job.attrs.data?.outboundname === outboundname || job.attrs.data?.outbound_name === outboundname) {
         await job.remove();
         deletedJobs.push(job.attrs._id);
       }
     }
 
     for (const task of existingTasks) {
-      if (task.attrs.data?.outboundname === outboundname) {
+      if (task.attrs.data?.outboundname === outboundname || task.attrs.data?.outbound_name === outboundname) {
         await task.remove();
         deletedTasks.push(task.attrs._id);
       }

@@ -13,21 +13,25 @@ router.post("/", async (req, res) => {
     });
   }
 
+  //console.log(outboundname)
+
   try {
     // Optional: Check for existing jobs
     const existingJobs = await agenda.jobs({ name: 'trigger-email-batch' });
+      //console.log("Existing Jobs: "+existingJobs)
+
     let outboundjobs =[]
 
    for (let i=0; i<existingJobs.length;i++){
     let job = existingJobs[i]
-    // console.log(job.attrs)
-    if (job.attrs.data.outboundname==outboundname){
-
-
+     //console.log(job)
+    if (job.attrs.data.outboundname===outboundname || job.attrs.data.outbound_name===outboundname){
 
       outboundjobs.push(job)
     }
    }
+
+   //console.log(outboundjobs)
 
    
     return res.json({ success: true, message: "outbounds retrieved", data:outboundjobs });
@@ -38,8 +42,8 @@ router.post("/", async (req, res) => {
       message: "Failed to retrive outbound tasks.",
       data:[]
     });
-  }
+  } 
 });
-
+ 
 export default router;
  

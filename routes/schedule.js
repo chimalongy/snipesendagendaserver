@@ -4,37 +4,39 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const {
+    user_id,
+    outbound_name,
+    outbound_id,
+    task_name,
+    task_id,
+    task_type,
+    task_subject,
+    task_body,
     triggerAt,
     recipients,
-    smtp,
     interval,
-    outboundname,
-    outboundId,
-    taskSubject,
-    taskBody,
-    taskname,
-    sendername,
+    sender_name,
     signature,
-    taskType,
-    user_id,
-    task_id,
-    threads
+    threads,
+    sender_email,
+    access_token,
+    refresh_token,
   } = req.body;
-
 
   if (
     !triggerAt ||
     !recipients ||
-    !smtp ||
     !interval ||
-    !outboundname ||
-    !outboundId ||
-    !taskBody ||
-    !taskSubject ||
-    !taskname ||
-    !sendername ||
-    !signature||
-    !taskType||
+    !outbound_name ||
+    !outbound_id ||
+    !task_body ||
+    !task_subject ||
+    !task_name ||
+    !sender_name ||
+    !access_token ||
+    !refresh_token ||
+    !signature ||
+    !task_type ||
     !user_id ||
     !task_id ||
     !threads
@@ -59,12 +61,17 @@ router.post("/", async (req, res) => {
 
   console.log("🛬 Received triggerAt:", triggerAt);
   console.log("🕒 Human-readable trigger time:", humanTime);
-  console.log("🕒 Parsed triggerAt:",new Date(triggerAt).toLocaleString("en-US", { timeZone: "Africa/Lagos" }));
-  console.log("🕒 Current time:    ",new Date().toLocaleString("en-US", { timeZone: "Africa/Lagos" }));
+  console.log(
+    "🕒 Parsed triggerAt:",
+    new Date(triggerAt).toLocaleString("en-US", { timeZone: "Africa/Lagos" })
+  );
+  console.log(
+    "🕒 Current time:    ",
+    new Date().toLocaleString("en-US", { timeZone: "Africa/Lagos" })
+  );
   console.log("⏱️  Computed delay (ms):", delay);
   console.log("⏱️  Computed delay (sec):", (delay / 1000).toFixed(2));
   console.log("✅ All required fields are available");
-
 
   if (delay < 1000) {
     return res.status(400).json({
@@ -72,24 +79,26 @@ router.post("/", async (req, res) => {
       message: "Schedule time must be at least 1 second in the future",
     });
   }
-    // console.log(threads)
-    // console.log("TASK TYPE :"+ taskType)
+  // console.log(threads)
+  // console.log("TASK TYPE :"+ taskType)
   try {
-    await agenda.schedule(triggerDate, 'trigger-email-batch', {
-      recipients,
-      smtp,
-      interval,
-      outboundname,
-      outboundId,
-      taskSubject,
-      taskBody,
-      taskname,
-      sendername,
-      signature,
-      taskType,
+    await agenda.schedule(triggerDate, "trigger-email-batch", {
       user_id,
+      outbound_name,
+      outbound_id,
+      task_name,
       task_id,
-      threads
+      task_type,
+      task_subject,
+      task_body,
+      recipients,
+      interval,
+      sender_name,
+      signature,
+      threads,
+      sender_email,
+      access_token,
+      refresh_token,
     });
 
     console.log("✅ Task scheduled in Agenda");
