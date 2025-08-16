@@ -17,6 +17,12 @@ app.use(cors("*"));
 
 // app.use(morgan('combined')); // or 'dev', 'tiny', etc.
 app.use(express.json());
+
+// ✅ Health check route
+app.get('/', (req, res) => {
+  res.send('Server running');
+});
+
 app.use('/schedule', scheduleRouter);
 app.use('/get-outbound-tasks', getoutboundtasksroute);
 app.use('/delete-outbound-tasks', deleteoutboundtasksroute);
@@ -27,7 +33,6 @@ defineMasterJob(agenda);
 
 (async function () {
   await agenda.start(); // Start agenda before listening
-  //const PORT = process.env.PORT || 4000;
   const PORT = SETTINGS.PORT || 4000;
   app.listen(PORT, () => {
     console.log(`Worker API running on port ${PORT}`);
@@ -41,4 +46,3 @@ defineMasterJob(agenda);
     process.exit(0); 
   });
 });
-
