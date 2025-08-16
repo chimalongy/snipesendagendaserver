@@ -1,15 +1,16 @@
 import { updateEmailSettings } from "./UpdateEmailSettings.js";
 
 import { google } from "googleapis";
-
-
-
+import { SETTINGS } from "./globals.js";
 
 export function createOAuth2Client(accessToken, refreshToken) {
   const oAuth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    // process.env.GOOGLE_CLIENT_ID,
+    // process.env.GOOGLE_CLIENT_SECRET,
+    // process.env.GOOGLE_REDIRECT_URI
+    SETTINGS.GOOGLE_CLIENT_ID,
+    SETTINGS.GOOGLE_CLIENT_SECRET,
+    SETTINGS.GOOGLE_REDIRECT_URI
   );
 
   oAuth2Client.setCredentials({
@@ -19,9 +20,6 @@ export function createOAuth2Client(accessToken, refreshToken) {
 
   return oAuth2Client;
 }
-
-
-
 
 export async function refreshAccessToken(oAuth2Client, user_id, email) {
   try {
@@ -44,9 +42,8 @@ export async function refreshAccessToken(oAuth2Client, user_id, email) {
     const newToken = tokenInfo.token;
 
     // Update in DB
-    
 
-    await updateEmailSettings(user_id, email,"access_token", newToken)
+    await updateEmailSettings(user_id, email, "access_token", newToken);
 
     return newToken;
   } catch (error) {

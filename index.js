@@ -1,4 +1,5 @@
 import express from 'express';
+import { SETTINGS } from './utils/globals.js';
 import dotenv from 'dotenv';
 import scheduleRouter from './routes/schedule.js';
 import getoutboundtasksroute from "./routes/getoutboundtasks.js"
@@ -26,7 +27,8 @@ defineMasterJob(agenda);
 
 (async function () {
   await agenda.start(); // Start agenda before listening
-  const PORT = process.env.PORT || 4000;
+  //const PORT = process.env.PORT || 4000;
+  const PORT = SETTINGS.PORT || 4000;
   app.listen(PORT, () => {
     console.log(`Worker API running on port ${PORT}`);
   });

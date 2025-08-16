@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { SETTINGS } from '../globals';
 
 // const pool = new Pool({
 //   user: 'postgres',
@@ -11,7 +12,8 @@ import { Pool } from 'pg';
 
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  // connectionString: process.env.DATABASE_URL,
+  connectionString: SETTINGS.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false, // required by Supabase
   },
