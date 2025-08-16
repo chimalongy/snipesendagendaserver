@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { SETTINGS } from '../globals';
+import { SETTINGS } from '../globals.js';
 
 // const pool = new Pool({
 //   user: 'postgres',

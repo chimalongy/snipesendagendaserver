@@ -1,7 +1,7 @@
 // agenda.js
 import { Agenda } from 'agenda';
 import dotenv from 'dotenv';
-import { SETTINGS } from './utils/globals';
+import { SETTINGS } from './utils/globals.js';
 
 dotenv.config();
 
