@@ -19,7 +19,8 @@ router.post("/", async (req, res) => {
     signature,
     threads,
     sender_email,
-    password
+    access_token,
+    refresh_token,
   } = req.body;
 
   if (
@@ -32,12 +33,13 @@ router.post("/", async (req, res) => {
     !task_subject ||
     !task_name ||
     !sender_name ||
+    !access_token ||
+    !refresh_token ||
     !signature ||
     !task_type ||
     !user_id ||
     !task_id ||
-    !threads ||
-    !password
+    !threads
   ) {
     return res.status(400).json({
       success: false,
@@ -79,8 +81,8 @@ router.post("/", async (req, res) => {
   }
   // console.log(threads)
   // console.log("TASK TYPE :"+ taskType)
-  console.log("Logging payload")
-  let payload = {
+  try {
+    await agenda.schedule(triggerDate, "trigger-email-batch", {
       user_id,
       outbound_name,
       outbound_id,
@@ -95,12 +97,9 @@ router.post("/", async (req, res) => {
       signature,
       threads,
       sender_email,
-      password
-    }
-  //  console.log(payload)
-
-  try {
-    await agenda.schedule(triggerDate, "trigger-email-batch",payload );
+      access_token,
+      refresh_token,
+    });
 
     console.log("✅ Task scheduled in Agenda");
     return res.json({ success: true, message: "Task scheduled in Agenda" });

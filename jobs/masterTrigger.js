@@ -15,13 +15,12 @@ export const defineMasterJob = (agenda) => {
       signature,
       threads,
       sender_email,
-      access_token,
-      refresh_token,
+      password
     } = job.attrs.data;
 
     const intervalMs = Number(interval) * 1000; // assuming interval is in seconds
 
-    let delay = 0;
+    let delay = 0; 
 
     for (const recipient of recipients) {
       const sendTime = new Date(Date.now() + delay);
@@ -39,9 +38,9 @@ export const defineMasterJob = (agenda) => {
 
         }
       } else {
-        console.log(task_type);
+      //  console.log(task_type);
       }
-      console.log(replyto);
+     // console.log(replyto);
 
       let payload = {
         recipient,
@@ -58,17 +57,18 @@ export const defineMasterJob = (agenda) => {
         message_id: replyto,
         thread_id,
         sender_email,
-        access_token,
-        refresh_token,
+        password
       }; 
 
-      console.log(payload);
+     // console.log(payload);
 
+ 
+ 
       await agenda.schedule(sendTime, "send-email", payload);
 
-      console.log( 
-        `📨 Scheduled email for ${recipient} at ${sendTime.toISOString()}`
-      );
+      // console.log( 
+      //   `📨 Scheduled email for ${recipient} at ${sendTime.toISOString()}`
+      // );
 
       delay += intervalMs; // increase delay for next recipient
     }

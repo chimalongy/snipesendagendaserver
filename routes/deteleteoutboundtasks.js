@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const { outboundname } = req.body;
-   //console.log(outboundname)
+   console.log("deleting outbound - " + outboundname)
   if (!outboundname) {
     return res.status(400).json({
       success: false,
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
   try {
     const existingJobs = await agenda.jobs({ name: "trigger-email-batch" });
     const existingTasks = await agenda.jobs({ name: "send-email" });
-
+  
     let deletedJobs = [];
     let deletedTasks = [];
 
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
         await job.remove();
         deletedJobs.push(job.attrs._id);
       }
-    }
+    } 
 
     for (const task of existingTasks) {
       if (task.attrs.data?.outboundname === outboundname || task.attrs.data?.outbound_name === outboundname) {
