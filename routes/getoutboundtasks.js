@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     });
   }
 
-  //console.log(outboundname)
+  console.log("FETCHING TASKS FOR "+outboundname)
 
   try {
     // Optional: Check for existing jobs
@@ -33,8 +33,9 @@ router.post("/", async (req, res) => {
 
    //console.log(outboundjobs)
 
-   
+    console.log("SUCCESSFULLY FETCHed TASKS FOR "+outboundname)
     return res.json({ success: true, message: "outbounds retrieved", data:outboundjobs });
+    
   } catch (error) {
     console.error("❌ Error sretrieving outbound tasks:", error);
     return res.status(500).json({
@@ -46,4 +47,4 @@ router.post("/", async (req, res) => {
 });
  
 export default router;
- 
+  
